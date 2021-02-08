@@ -26,10 +26,10 @@
 
         camera.position.z = 5;
 
-        document.addEventListener("wheel", wheelZoom);
-
-        function wheelZoom(e){
-            print(e)
+        document.addEventListener("DOMMouseScroll", wheelZoom);
+        
+        function wheelZoom(evt){
+            camera.position.z += evt.detail * 0.1;
         }
 
         function animate() {
