@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Game 2D test</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <script>
+            /*
+                Variables Globales
+            */
+            const sizeTableGame = {
+                sizeX: 7,
+                sizeY: 7
+            }
+
+            const player = {
+                DOMElement: null,
+                posX: 0,
+                posY: 0,
+            }
+
+
+            /*
+                Code Principal
+            */
+            const tableauGLO = createTable(sizeTableGame.sizeX, sizeTableGame.sizeY);
+            setEventListener(tableauGLO)
+
+
+
+
+            /*
+                Fonctions
+            */
+            function setEventListener(tableau){
+                tableau.forEach(ligne => {
+                    ligne.forEach(element => {
+                        element.addEventListener("click", () => {
+                            changePlayerPosition(element)
+                        });
+                    });
+                });
+            }
+        
+            function createTable(sizeX, sizeY){
+                let tableDOM = document.createElement("table");
+                let tableau = [];
+
+                for(var i = 0; i < sizeX; i++){
+                    let row = document.createElement("tr");
+                    let ligne = [];
+
+                    for(var j = 0; j < sizeY; j++){
+                        let column = document.createElement("td");
+                        
+                        if (player.posX == i && player.posY == j){
+                            column.id = "player";
+                            player.DOMElement = column;
+                        }
+                        row.appendChild(column);
+                        ligne.push(column);
+                    }
+                    tableDOM.appendChild(row);
+                    tableau.push(ligne);
+                }
+                tableDOM.id = "tableDeJeu";
+
+                document.body.appendChild(tableDOM);
+
+                return tableau;
+            }
+        
+            function changePlayerPosition(newPosition){
+                player.DOMElement.style.background = "none";
+                newPosition.style.background = "green";
+                player.DOMElement = newPosition;
+            }
+        </script>
+    </body>
+</html>
