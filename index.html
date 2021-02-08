@@ -93,7 +93,6 @@
                 renderer.setSize( window.innerWidth, window.innerHeight );
                 document.body.appendChild( renderer.domElement );
                 camera.position.set(0, 7.5, 0)
-                scene.add( controls.getObject() );
                 raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
                 window.addEventListener( 'resize', onWindowResize );
 
@@ -107,6 +106,7 @@
                         sur la fénêtre.
                 */
                 controls = new PointerLockControls( camera, document.body );
+                scene.add( controls.getObject() );
                 const blocker = document.getElementById( 'blocker' );
                 const instructions = document.getElementById( 'instructions' );
 
