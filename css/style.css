@@ -2,8 +2,24 @@ td{
     width: 20px;
     height: 20px;
     border: solid 1px black;
-    text-align: center
+    text-align: center;
 }
+
+table{
+    border-collapse: collapse;
+    border-spacing: 0;  
+}
+
 #player {
     background-color: green;
+}
+.porte {
+    background-color: red;
+}
+.cle {
+    background-color: yellow;
+}
+
+.open{
+    background-color: rgb(0, 165, 0);
 }

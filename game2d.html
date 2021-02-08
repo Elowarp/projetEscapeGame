@@ -12,7 +12,7 @@
             */
             const sizeTableGame = {
                 sizeX: 7,
-                sizeY: 7
+                sizeY: 7,
             }
 
             const player = {
@@ -21,29 +21,30 @@
                 posY: 0,
             }
 
+            const objets = {
+                cle: {
+                    DOMElement: null,
+                    found: false,
+                    posX: 3,
+                    posY: 4,
+                },
+                porte: {
+                    DOMElement: null,
+                    open: false,
+                },
+            }
+
 
             /*
                 Code Principal
             */
             const tableauGLO = createTable(sizeTableGame.sizeX, sizeTableGame.sizeY);
-            setEventListener(tableauGLO)
-
-
+            setEventListeners(tableauGLO)
 
 
             /*
                 Fonctions
             */
-            function setEventListener(tableau){
-                tableau.forEach(ligne => {
-                    ligne.forEach(element => {
-                        element.addEventListener("click", () => {
-                            changePlayerPosition(element)
-                        });
-                    });
-                });
-            }
-        
             function createTable(sizeX, sizeY){
                 let tableDOM = document.createElement("table");
                 let tableau = [];
@@ -58,7 +59,16 @@
                         if (player.posX == i && player.posY == j){
                             column.id = "player";
                             player.DOMElement = column;
+
+                        } else if (i == sizeX-1 && j == sizeY-1){
+                            objets.porte.DOMElement = column;
+                            objets.porte.DOMElement.classList= "porte"
+
+                        } else if (i == objets.cle.posX && j == objets.cle.posY){
+                            objets.cle.DOMElement = column;
+                            objets.cle.DOMElement.classList = "cle"
                         }
+
                         row.appendChild(column);
                         ligne.push(column);
                     }
@@ -68,14 +78,55 @@
                 tableDOM.id = "tableDeJeu";
 
                 document.body.appendChild(tableDOM);
-
                 return tableau;
             }
         
+            function setEventListeners(tableau){
+                tableau.forEach((line) => {
+                    line.forEach((element) => {
+                        element.addEventListener("click", () => { changePlayerPosition(element) })
+                    })
+                })
+            }
+
             function changePlayerPosition(newPosition){
-                player.DOMElement.style.background = "none";
-                newPosition.style.background = "green";
+                var coordonnes = getCoordinates(newPosition);
+                if (newPosition == objets.cle.DOMElement){
+                    player.DOMElement.id = "";
+                    newPosition.id = "player";
+
+                    objets.porte.open = true;
+                    objets.porte.DOMElement.classList += " open";
+                    
+                    objets.cle.found = true;
+                    objets.cle.DOMElement.classList = "";
+
+                } else if (newPosition == objets.porte.DOMElement){
+                    if (objets.porte.open){
+                        player.DOMElement.id = "";
+                        newPosition.id = "player";
+                        alert("Gagné !");
+
+                    } else {
+                        alert("Vous ne pouvez pas y renter ! Il vous faut une clé !")
+                        return
+                    }
+                } else {
+                    player.DOMElement.id = "";
+                    newPosition.id = "player";
+
+                }
                 player.DOMElement = newPosition;
+            }
+
+            function getCoordinates(domContent){
+                for(var y = 0; y < tableauGLO.length; y++){
+                    for(var x = 0; x < tableauGLO[y].length; x++){
+                        if (tableauGLO[y][x] == domContent){
+                            return {x, y}
+                        }
+                    }
+                }
             }
         </script>
     </body>
