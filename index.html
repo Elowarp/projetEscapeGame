@@ -31,7 +31,6 @@
             let camera, scene, renderer, controls;
             let composer, effectFXAA, outlinePass;
             let selectedObjects;
-            let compte = 0;
 
 			const collisions = [];
             const usable = [];
@@ -293,18 +292,6 @@
 
                 //Mouvement du personnage
                 movePerson()
-                compte+=1;
-                //console.log(compte);
-                if(compte > 360){
-                    let light = scene.getObjectByName("DirectionalLight")
-                    if (light.visible){
-                        light.visible = false
-                        compte = Math.floor(Math.random() * Math.floor(360)) + 340;
-                    } else {
-                        light.visible = true
-                        compte = Math.floor(Math.random() * Math.floor(360));
-                    }
-                }
 
                 renderer.render( scene, camera );
                 composer.render();
