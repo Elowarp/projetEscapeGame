@@ -3,44 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>My application</title>
-        <style>
-            body { margin: 0; }
-                #blocker {
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0,0,0,0.5);
-                }
-
-                #instructions {
-                    width: 100%;
-                    height: 100%;
-
-                    display: -webkit-box;
-                    display: -moz-box;
-                    display: box;
-
-                    -webkit-box-orient: horizontal;
-                    -moz-box-orient: horizontal;
-                    box-orient: horizontal;
-
-                    -webkit-box-pack: center;
-                    -moz-box-pack: center;
-                    box-pack: center;
-
-                    -webkit-box-align: center;
-                    -moz-box-align: center;
-                    box-align: center;
-
-                    color: #ffffff;
-                    text-align: center;
-                    font-family: Arial;
-                    font-size: 14px;
-                    line-height: 24px;
-
-                    cursor: pointer;
-                }
-        </style>
+        <link rel="stylesheet" href="css/style.css" type="text/css">
     </head>
     <body>
         <div id="blocker">
@@ -51,23 +14,33 @@
                 Regarder: Souris
             </div>
         </div>
+        <div id="dot" style="display: none">
+        </div>
         <script type="module">
             import * as THREE from "https://threejs.org/build/three.module.js";
             import { PointerLockControls } from 'https://threejs.org/examples/jsm/controls/PointerLockControls.js';
+            import { EffectComposer } from 'https://threejs.org/examples/jsm/postprocessing/EffectComposer.js';
+            import { RenderPass } from 'https://threejs.org/examples/jsm/postprocessing/RenderPass.js';
+            import { ShaderPass } from 'https://threejs.org/examples/jsm/postprocessing/ShaderPass.js';
+            import { OutlinePass } from 'https://threejs.org/examples/jsm/postprocessing/OutlinePass.js';
+            import { FXAAShader } from 'https://threejs.org/examples/jsm/shaders/FXAAShader.js';
 
             /*
                 Variables
             */
             let camera, scene, renderer, controls;
+            let composer, effectFXAA, outlinePass;
+            let selectedObjects;
+            let compte = 0;
 
 			const collisions = [];
+            const usable = [];
 
 			let moveForward = false;
 			let moveBackward = false;
 			let moveLeft = false;
             let moveRight = false;
 
-			let prevTime = performance.now();
 			const velocity = new THREE.Vector3();
 			const direction = new THREE.Vector3();
 			const vertex = new THREE.Vector3();
@@ -99,6 +72,18 @@
                 //Couleur de fond
                 scene.background = new THREE.Color( 0x82898f );
 
+                composer = new EffectComposer( renderer );
+
+                const renderPass = new RenderPass( scene, camera );
+				composer.addPass( renderPass );
+
+                outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
+                composer.addPass( outlinePass );
+
+                effectFXAA = new ShaderPass( FXAAShader );
+				effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+				composer.addPass( effectFXAA );
+
 
                 //    Gestion du curseur,
                 //        Curseur prit par la fenêtre quand on clique
@@ -108,6 +93,7 @@
                 scene.add( controls.getObject() );
                 const blocker = document.getElementById( 'blocker' );
                 const instructions = document.getElementById( 'instructions' );
+                const dot = document.getElementById('dot')
 
                 instructions.addEventListener( 'click', function () {
                     controls.lock();
@@ -115,10 +101,13 @@
                 controls.addEventListener( 'lock', function () {
                     instructions.style.display = 'none';
                     blocker.style.display = 'none';
+                    dot.style.display = '';
+
                 } );
                 controls.addEventListener( 'unlock', function () {
                     blocker.style.display = 'block';
                     instructions.style.display = '';
+                    dot.style.display = 'none';
                 } );
 
 
@@ -182,12 +171,6 @@
                 /*
                     Création de la scene
                 */
-                //Ajout d'un sol
-                let floorGeometry = new THREE.PlaneGeometry( 30, 30 );
-                const floorMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
-                const floor = new THREE.Mesh( floorGeometry, floorMaterial );
-                floor.rotation.x = Math.PI / 2;
-                scene.add( floor );
 
                 //Ajout scène crée dans l'editeur de threejs.org
                 const loader = new THREE.ObjectLoader();
@@ -198,6 +181,7 @@
                     //Callback : une fois le chargement fini
                     function ( obj ) {
                         detectCollision(obj);
+                        setTexture(obj)
                         scene.add( obj );
                     },
 
@@ -225,39 +209,74 @@
             function detectCollision(scene){
                 /*
                     Ajout de chaque mesh de la scène dans le tableau collision
+                    et ajout des objets utilisables dans le tableau usable(utilisé avec le raycaster)
                 */
                 for(let i = 0; i < scene.children.length; i++){
-                    if (scene.children[i].type == "Mesh"){
+                    //Si on a établi la collision pour le mesh
+                    if (scene.children[i].userData.collision === true){ 
                         collisions.push(scene.children[i])
+
+                    } else if (scene.children[i].type == "Group"){ //Ou si c'est un groupe
+
+                        //On regarde chaque élément du groupe
+                        for (let j = 0; j < scene.children[i].children.length; j++){
+                            if (scene.children[i].children[j].userData.collision === true){ //Test pour les collisions
+                                collisions.push(scene.children[i].children[j])
+                            } 
+                            if (scene.children[i].children[j].userData.usable === true) { //Test pour les objets utilisables
+                                usable.push(scene.children[i].children[j])
+                            }
+                        }
+                    }
+
+                    if (scene.children[i].userData.usable === true){ //Test pour savoir si l'objet est utilisable
+                        usable.push(scene.children[i])
                     }
                 }
+            }
+
+            function setTexture(scene){
+                /*
+                    Définition des caractérisques spéciales de certaines textures
+                */
+
+                //On liste exhaustivement tous les meshes que l'on doit modifier
+                scene.children.forEach(element => {
+                    switch(element.name){
+                        case "Sol":
+                            //Modification du nombre de fois la texture est répétée
+                            element.material.map.wrapS = element.material.map.wrapT = THREE.RepeatWrapping;
+                            element.material.map.repeat.set( 3, 3 );
+                            break;
+
+                        case "Walls":
+                            //On utilise une boucle car les 4 murs sont réunis dans un groupe
+                            for (let i = 0; i < element.children.length; i++){
+                                element.children[i].material.map.wrapS = element.children[i].material.map.wrapT = THREE.RepeatWrapping;
+                                element.children[i].material.map.repeat.set( 2.5, 1.5 );
+
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                });
             }
 
             function movePerson(){
                 /*
                     Gestion du déplacement du personnage
                 */
-                const time = performance.now();
                 if ( controls.isLocked === true) { //Si le curseur est prit dans le jeu donc qu'il joue
-                    //On s'occupe ici surtout de la velocité du personnage,
-                    //  de façon à ce que ce ne soit pas des mouvements saccadés
-                    const delta = ( time - prevTime ) / 1000;
-
-                    velocity.x -= velocity.x * 10.0 * delta;
-                    velocity.z -= velocity.z * 10.0 * delta;
 
                     direction.z = Number( moveForward ) - Number( moveBackward );
                     direction.x = Number( moveRight ) - Number( moveLeft );
-                    direction.normalize(); // On s'assure que on va à la même vitesse partout
+                    direction.normalize(); // On transforme le vecteur en vecteur unitaire
 
-                    if ( moveForward || moveBackward ) velocity.z -= direction.z * 300.0 * delta;
-                    if ( moveLeft || moveRight ) velocity.x -= direction.x * 300.0 * delta;
-
-                    controls.moveRight( - velocity.x * delta );
-                    controls.moveForward( - velocity.z * delta );
+                    controls.moveRight(direction.x * 0.5);
+                    controls.moveForward(direction.z * 0.5);
                 }
-
-                prevTime = time;
             }
 
             function animate() {
@@ -266,23 +285,67 @@
                 */
                 requestAnimationFrame( animate ); //Récursion
 
-                // 
                 // Collisions
-                //
+                collisionsTest();
 
+                //Aura autour de certains objets utilisable
+                detectUsableObjects();
+
+                //Mouvement du personnage
+                movePerson()
+                compte+=1;
+                //console.log(compte);
+                if(compte > 360){
+                    let light = scene.getObjectByName("DirectionalLight")
+                    if (light.visible){
+                        light.visible = false
+                        compte = Math.floor(Math.random() * Math.floor(360)) + 340;
+                    } else {
+                        light.visible = true
+                        compte = Math.floor(Math.random() * Math.floor(360));
+                    }
+                }
+
+                renderer.render( scene, camera );
+                composer.render();
+            }
+
+            function collisionsTest(){
+                /*
+                    Test des collisions du personnage, évite de traverser les murs et les objets dont on ne veut pas qu'il traverse
+                */
                 //Vecteurs utilisés par le raycaster pour detecter tout les objets à gauche, devant, à droite et derrière
-                var vectors = [new THREE.Vector3(0, 0, -1),
+                let vectors = [
+                    new THREE.Vector3(0, 0, -1),
                     new THREE.Vector3(1, 0, 0),
                     new THREE.Vector3(0, 0, 1),
-                    new THREE.Vector3(-1, 0, 0),]
+                    new THREE.Vector3(-1, 0, 0)
+                ]
 
                 //Boucle s'exécutant sur la liste des vecteurs
                 for (let i = 0; i < vectors.length; i++){
+                    let cameraPos = new THREE.Vector3();
+
                     //On modifie le vecteur pour l'adapter à notre caméra et au raycaster
-                    vectors[i] = camera.localToWorld(vectors[i])
-                    vectors[i].sub(camera.position)
-                    var ray = new THREE.Raycaster( camera.position, vectors[i]);
-                    var intersects = ray.intersectObjects( collisions );
+                    let vec = new THREE.Vector3()
+                    vec = camera.getWorldDirection(vec)
+
+                    if (vec.y >= -0.95 && vec.y <= 0.95){
+                        vectors[i] = camera.localToWorld(vectors[i])
+                        vectors[i].sub(camera.position)
+                        
+                        camera.localToWorld(cameraPos)
+                        cameraPos.y = 4;
+                        vectors[i].y = 0;
+
+                    } else {
+                        camera.localToWorld(cameraPos)
+                        cameraPos.y = 4;
+
+                    }
+                     
+                    let ray = new THREE.Raycaster( cameraPos, vectors[i]);
+                    let intersects = ray.intersectObjects( collisions );
 
                     //On teste si le raycaster trouve quelque chose sur un des vecteurs
                     //  et on regarde si la distance avec lui est en dessous de 5
@@ -306,9 +369,69 @@
                         }
                     }
                 }
+            }
+        
+            function detectUsableObjects(){
+                /*
+                    Gestion de la detection des objets qui sont visés par le joueur
+                */
+                let vector = new THREE.Vector3(0, 0, -1); //Vecteur signifiant l'orientation de la tête du personnage
 
-                movePerson()
-                renderer.render( scene, camera );
+                vector = camera.localToWorld(vector)
+                vector.sub(camera.position)
+
+                //Raycaster des objets se trouvant dans la visé du joueur et qui sont dans le tableau usable
+                let ray = new THREE.Raycaster( camera.position, vector)
+                let intersects = ray.intersectObjects(usable)
+
+                //Test de si on détecte bien un mesh ET qu'il se trouve à moins de 19
+                if (intersects.length > 0 && intersects[0].distance < 19){
+                    outlineObjects(intersects[0].object);
+
+                } else {
+                    outlineObjects();
+
+                }
+
+            }
+            
+            function outlineObjects(selectedObject){
+                /*
+                    Ajout d'un contour à un objet sur la scène
+                */
+                let color = new THREE.Color(0xff0000)
+                if (selectedObject != null){ //Si on nous donne un objet à contourer
+                    selectedObjects = []; //Liste des objets à coutourer (Taille toujours égale à 0 ou 1 pour notre jeu)
+                    
+
+                    if (selectedObject.type == "Group"){ 
+                        //On parcourt le groupe entier jusque trouver l'objet à coutourer que 
+                        //  l'on ajoute au tableau selectedObjects
+                        for(let i = 0; i < selectedObject.children.length; i++){
+                            if(selectedObject.children[i].userData.usable === true){   
+                                selectedObjects.push(selectedObject.children[i])
+                                break;
+                            }
+
+                        }
+
+                    } else {
+                        //Si on a directement le mesh on l'ajoute au tableau
+                        selectedObjects.push( selectedObject );
+                    }
+                    if(selectedObjects[0].userData.blocked){
+                        color = new THREE.Color(0xff0000)
+                    } else {
+                        color = new THREE.Color(0xffffff)
+                    }
+                } else {
+                    //On supprime tous les objets coutourés
+                    selectedObjects = []
+                }
+
+                //On affecte la nouvelle liste aux objets à coutourer
+                outlinePass.visibleEdgeColor = color
+                outlinePass.selectedObjects = selectedObjects;
             }
         </script>
     </body>
