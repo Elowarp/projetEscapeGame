@@ -132,6 +132,7 @@ function init(){
     instructions.addEventListener( 'click', function () {
         controls.lock();
     } );
+
     controls.addEventListener( 'lock', function () {
         instructions.style.display = 'none';
         blocker.style.display = 'none';
@@ -145,6 +146,13 @@ function init(){
             dot.style.display = 'none';
         }
     } );
+
+    window.addEventListener("blur", () => {
+        blocker.style.display = 'block';
+        instructions.style.display = '';
+        dot.style.display = 'none';
+    })
+
     document.addEventListener('click', function(){
         if(controls.isLocked === true){
             if(selectedObjects.length > 0){
