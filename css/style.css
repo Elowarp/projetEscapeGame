@@ -124,6 +124,7 @@ body {
     top: 30%;
     left: 30%;
     background-color: rgb(255, 255, 255);
+    border-radius: 10px;
     box-shadow: 3px 2px 5px black;
 }
 
@@ -173,4 +174,36 @@ body {
     top:-56%;
     background-color: rgb(212, 255, 168);
 
+}
+
+.login{
+    margin-top: 20%;
+    margin-left: 21%;
+    margin-right: 27%;
+    text-align: center;
+}
+
+.inputSelect{
+    width: 68%;
+    padding: 5%;
+    margin-top: 3%;
+    border-radius: 10px;
+    font-size: 15px;
+}
+.wrong{
+    border-color: red;
+    border-width: 3px;
+}
+
+.sendButton{
+    background-color: rgb(102, 187, 183);
+    border-radius: 50%;
+    margin: 2%;
+    padding: 2%;
+    width: -1%;
+    position: absolute;
+}
+
+.sendButton:hover{
+    cursor: pointer;
 }

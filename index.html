@@ -22,101 +22,117 @@
 
         <div id="laptop" class="blocker" style="display:none">
             <div class="laptop">
-                <h1 class="title">
-                    Veripasur 
-                </h1>
-                <div class="navbar">
-                    <div class="home" onclick="closeLaptop()" onmouseover="showInfo()" onmouseout="hideInfo()">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/VisualEditor_-_Icon_-_Menu.svg/1024px-VisualEditor_-_Icon_-_Menu.svg.png" height="50" width="50"/>
-                    </div>
-                    <div class="infoButton" id="infoButton" style="display:none">
-                        <h3 class="textIcon" style="margin:auto">Eteindre</h3>
-                    </div>
-                </div>
-
-                <div class="folder" onclick="openEmptyFolder()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
-                    <p class="textIcon">Pas un dossier<br>pour hacker</p>
-
-                </div>
-
-                <div class="folder" style="margin-left:12%" onclick="openEmptyFolder()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
-                    <p class="textIcon">Pas un dossier<br>pour hacker<br>je te dis</p>
-
-                </div>
-
-                <div class="folder" style="margin-left:21%" onclick="openEmptyFolder()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
-                    <p class="textIcon">Devoirs</p>
-
-                </div>
-
-                <div class="folder" style="margin-left:3%; margin-top: 15%;" onclick="openEmptyFolder()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
-                    <p class="textIcon">Secrets d'état</p>
-
-                </div>
-
-                <div class="folder" style="margin-left:12%; margin-top: 15%;" onclick="openEmptyFolder()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
-                    <p class="textIcon">Photos de moi<br>bébé</p>
-
-                </div>
-
-                <div class="folder" style="margin-left:93%; margin-top: 39%;" onclick="openFolderNotHack()">
-                    <img src="https://cdn4.iconfinder.com/data/icons/email-2-2/32/Trash-Email-Bin-512.png" height="100" width="100"/>
-                    <p class="textIcon">Corneille</p>
-
-                </div>
-
-                <div class="openedFolder" id="emptyFolder" style="display:none">
-                    <div class="barFolder">
-                        <div class="exitFolder" onclick="exitFolder()">
-                            <img src="http://cdn.onlinewebfonts.com/svg/img_469207.png" height="30" width="30"/>
+                <div class="desktop" id="desktop" style="display:none">
+                    <h1 class="title">
+                        Veripasur 
+                    </h1>
+                    <div class="navbar">
+                        <div class="home" onclick="closeLaptop()" onmouseover="showInfo()" onmouseout="hideInfo()">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/VisualEditor_-_Icon_-_Menu.svg/1024px-VisualEditor_-_Icon_-_Menu.svg.png" height="50" width="50"/>
                         </div>
-                        <p class="textIcon" style="margin-top:20%">Dossier vide !</p>
-                    </div>
-
-                </div>
-
-                <div class="openedFolder" id="folderToHack" style="display:none">
-                    <div class="barFolder">
-                        <div class="exitFolder" onclick="exitFolder()">
-                            <img src="http://cdn.onlinewebfonts.com/svg/img_469207.png" height="30" width="30"/>
+                        <div class="infoButton" id="infoButton" style="display:none">
+                            <h3 class="textIcon" style="margin:auto">Eteindre</h3>
                         </div>
-
                     </div>
-
-                    <div class="folder" onclick="hackDoor()">
-                        <img src="https://i.pinimg.com/originals/7f/d2/e4/7fd2e46b2da9819e667fb75caf475cf7.png" height="100" width="100"/>
-                        <p class="textIcon">HackDoor<br>.hack</p>
-
+    
+                    <div class="folder" onclick="openEmptyFolder()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                        <p class="textIcon">Pas un dossier<br>pour hacker</p>
+    
                     </div>
-
-                    <div class="windowHack" id="windowHack" style="display:none">
-                        <p class="textIcon" style="margin-top: 10%;">Hack de la porte en cours.</p>
-
-                        <div class="iconHack">
-                            <img src="https://img.icons8.com/ios/452/hacker.png" height="70" width="70"/>
-
-                        </div>
-
-                        <div class="progressBar">
-                            <div class="progress">
-
+    
+                    <div class="folder" style="margin-left:12%" onclick="openEmptyFolder()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                        <p class="textIcon">Pas un dossier<br>pour hacker<br>je te dis</p>
+    
+                    </div>
+    
+                    <div class="folder" style="margin-left:21%" onclick="openEmptyFolder()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                        <p class="textIcon">Devoirs</p>
+    
+                    </div>
+    
+                    <div class="folder" style="margin-left:3%; margin-top: 15%;" onclick="openEmptyFolder()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                        <p class="textIcon">Secrets d'état</p>
+    
+                    </div>
+    
+                    <div class="folder" style="margin-left:12%; margin-top: 15%;" onclick="openEmptyFolder()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                        <p class="textIcon">Photos de moi<br>bébé</p>
+    
+                    </div>
+    
+                    <div class="folder" style="margin-left:93%; margin-top: 39%;" onclick="openFolderNotHack()">
+                        <img src="https://cdn4.iconfinder.com/data/icons/email-2-2/32/Trash-Email-Bin-512.png" height="100" width="100"/>
+                        <p class="textIcon">Corneille</p>
+    
+                    </div>
+    
+                    <div class="openedFolder" id="emptyFolder" style="display:none">
+                        <div class="barFolder">
+                            <div class="exitFolder" onclick="exitFolder('emptyFolder')">
+                                <img src="http://cdn.onlinewebfonts.com/svg/img_469207.png" height="30" width="30"/>
                             </div>
-
+                            <p class="textIcon" style="margin-top:20%">Dossier vide !</p>
                         </div>
-
+    
                     </div>
-
+    
+                    <div class="openedFolder" id="folderToHack" style="display:none">
+                        <div class="barFolder">
+                            <div class="exitFolder" onclick="exitFolder('folderToHack')">
+                                <img src="http://cdn.onlinewebfonts.com/svg/img_469207.png" height="30" width="30"/>
+                            </div>
+    
+                        </div>
+    
+                        <div class="folder" onclick="hackDoor()">
+                            <img src="https://i.pinimg.com/originals/7f/d2/e4/7fd2e46b2da9819e667fb75caf475cf7.png" height="100" width="100"/>
+                            <p class="textIcon">HackDoor<br>.hack</p>
+    
+                        </div>
+    
+                        <div class="windowHack" id="windowHack" style="display:none">
+                            <div class="barFolder" style="height:11%;">
+                                <div class="exitFolder" onclick="exitFolder('windowHack')">
+                                    <img src="http://cdn.onlinewebfonts.com/svg/img_469207.png" height="30" width="30"/>
+                                </div>
+        
+                            </div>
+    
+                            <p class="textIcon" style="margin-top: 10%;">Hack de la porte en cours.</p>
+                            <p class="textIcon" id="statusDoor" style="margin-top: 3%; display:none">Porte piratée !!!</p>
+    
+                            <div class="iconHack">
+                                <img src="https://img.icons8.com/ios/452/hacker.png" height="70" width="70"/>
+    
+                            </div>
+    
+                            <div class="progressBar" id="progressHack">
+                                <div class="progress">
+    
+                                </div>
+    
+                            </div>
+    
+                        </div>
+    
+                    </div>
+                </div>
+                
+                <div class="login" id="login">
+                    <input class="inputSelect" type="password" id="password" placeholder="Mot de passe">
+                    <a class="sendButton" onclick="checkPassword()">-></a>
                 </div>
             </div>
         </div>
 
         <script>
             var initFunctions;
+            let doorHacked = false;
 
             import('./js/init.js').then(object => {
                 init = object;
@@ -132,35 +148,47 @@
                 folder.style.display = "";
             }
 
-            function exitFolder(){
-                let folder = event.srcElement.parentNode.parentNode.parentNode
+            function exitFolder(app){
+                let folder = document.getElementById(app)
                 folder.style.display = "none";
             }
 
             function hackDoor(){
-                let hack = document.getElementById("windowHack");
-                hack.style.display = "";
+                let hackWindow = document.getElementById("windowHack")
+                let hackBar = document.getElementById("progressHack");
+                hackWindow.style.display = "";
 
-                let pourcent = 0;
+                if (!doorHacked){
+                    let pourcent = 0;
 
-                var increase = setInterval(()=>{
-                    if(pourcent>=100){
-                        stopIncrease()
-                    }
+                    var increase = setInterval(()=>{
+                        if(pourcent>=100){
+                            stopIncrease()
+                        }
 
-                    hack.children[2].children[0].style.width = pourcent + "%";
-                    pourcent = pourcent+1;
+                        hackBar.children[0].style.width = pourcent + "%";
+                        pourcent = pourcent+1;
 
-                }, 50)
+                    }, 50)
 
-                function stopIncrease(){
-                    clearInterval(increase)
-                }                
-
-                init.unlockDoor()
+                    function stopIncrease(){
+                        clearInterval(increase)
+                        doorHacked = true
+                        init.unlockDoor()
+                        let status = document.getElementById("statusDoor")
+                        status.style.display = ""
+                    }   
+                }
             }
 
             function closeLaptop(){
+                let desktop = document.getElementById("desktop")
+                desktop.style.display = "none"
+
+                let login = document.getElementById("login")
+                login.style.display = "";
+                login.children[0].value = ""
+
                 let laptop = document.getElementById("laptop")
                 laptop.style.display = 'none'
                 init.controlLock()
@@ -174,6 +202,20 @@
             function hideInfo(){
                 let info = document.getElementById("infoButton")
                 info.style.display = "none"
+            }
+        
+            function checkPassword(){
+                let password = document.getElementById("password")
+                if (password.value == "password123"){
+                    let login = document.getElementById("login")
+                    login.style.display = "none"
+
+                    let desktop = document.getElementById("desktop")
+                    desktop.style.display = "";
+                } else {
+                    password.classList += " wrong"
+                    
+                }
             }
         </script>
 
