@@ -8,10 +8,12 @@ import { FXAAShader } from 'https://threejs.org/examples/jsm/shaders/FXAAShader.
 
 const openLaptop = function (){
     afficheAEcran = "laptop";
+
     controls.unlock()
+
     let screen = document.getElementById("laptop")
     screen.style.display = "";
-    
+
 }
 
 const openCoffre = function (){
@@ -36,6 +38,7 @@ const openTrappe = function (){
 
 const controlLock = function (){
     controls.lock()
+    afficheAEcran = "";
 }
 
 const unlockDoor = function (){ 
@@ -72,10 +75,7 @@ let moveBackward = false;
 let moveLeft = false;
 let moveRight = false;
 
-const velocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
-const vertex = new THREE.Vector3();
-const color = new THREE.Color();
 
 init();
 animate();
@@ -131,14 +131,15 @@ function init(){
 
     instructions.addEventListener( 'click', function () {
         controls.lock();
-    } );
+    });
 
     controls.addEventListener( 'lock', function () {
         instructions.style.display = 'none';
         blocker.style.display = 'none';
         dot.style.display = '';
 
-    } );
+    });
+
     controls.addEventListener( 'unlock', function () {
         if (afficheAEcran != "laptop"){
             blocker.style.display = 'block';
@@ -148,9 +149,7 @@ function init(){
     } );
 
     window.addEventListener("blur", () => {
-        blocker.style.display = 'block';
-        instructions.style.display = '';
-        dot.style.display = 'none';
+        controls.unlock()
     })
 
     document.addEventListener('click', function(){
