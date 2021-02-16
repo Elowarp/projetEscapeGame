@@ -17,36 +17,52 @@ const openLaptop = function (){
 }
 
 const openCoffre = function (){
-    console.log("Coffre")
+    afficheAEcran = "coffre";
+
+    controls.unlock();
+
+    let coffre = document.getElementById("coffre");
+    coffre.style.display = "";
 }
 
 const removeTapis = function (){
-    console.log("Tapis")
+    let tapis = scene.getObjectByName("Tapis");
+    tapis.visible = false;
 }
 
 const openDoor = function (){
-    console.log("Door")
+    let door = scene.getObjectByName("Door");
+    if (door.userData.blocked == false){
+        changeLevel();
+    } else {
+        console.log("Fermé")
+        //Jouer le son "Mince c'est fermé"
+    }
 }
 
 const getCle = function (){
-    console.log("Cle")
+    let cle = scene.getObjectByName("Key");
+    gotCle = true;
+    cle.visible = false;
 }
 
 const openTrappe = function (){
-    console.log("Trappe")
+    if (gotCle){
+        endGame();
+    } else {
+        // Jouer le son "Mince c'est fermé"
+    }
 }
 
 const controlLock = function (){
-    controls.lock()
+    controls.lock();
     afficheAEcran = "";
 }
 
 const unlockDoor = function (){ 
-    usable.forEach(element => {
-        if (element.name == "Door"){
-            element.userData.blocked = false
-        }
-    })
+    let door = scene.getObjectByName("Door")
+    door.userData.blocked = false;
+
 }
 
 /*
@@ -55,11 +71,15 @@ const unlockDoor = function (){
 var camera, scene, renderer, controls;
 let composer, effectFXAA, outlinePass;
 let selectedObjects;
-let level = 2;
+let level = 1;
 let afficheAEcran;
 
-const collisions = [];
-const usable = [];
+let environment;
+
+
+
+let collisions = [];
+let usable = [];
 
 const actionsByPlayer = {
     "openLaptop": openLaptop,
@@ -69,6 +89,8 @@ const actionsByPlayer = {
     "getCle": getCle,
     "openTrappe": openTrappe,
 };
+
+let gotCle = false;
 
 let moveForward = false;
 let moveBackward = false;
@@ -230,9 +252,10 @@ function init(){
 
         //Callback : une fois le chargement fini
         function ( obj ) {
-            detectCollision(obj);
-            setTexture(obj)
-            scene.add( obj );
+            environment = obj;
+            detectCollision(environment);
+            setTexture(environment);
+            scene.add(environment);
         },
 
         //Callback : pendant le chargement
@@ -483,6 +506,18 @@ function outlineObjects(selectedObject){
     //On affecte la nouvelle liste aux objets à coutourer
     outlinePass.visibleEdgeColor = color
     outlinePass.selectedObjects = selectedObjects;
+}
+
+function changeLevel(){
+    level++;
+    controls.getObject().position.set(0, 7.5, 0);
+    controls.getObject().rotation.set(0, 0, 0);
+    usable = [];
+    detectCollision(environment);
+}
+
+function endGame(){
+    alert("Tu as fini le jeu")
 }
 
 export {controlLock, unlockDoor}

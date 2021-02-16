@@ -164,13 +164,136 @@
             </div>
         </div>
 
+        <div id="coffre" class="coffreBackground" style="display:none">
+            <div class="container">
+                <div class="row" style="margin-top: 20px;">
+                    <div class="container-fluid entryCode" style="width:90%; height: 80px;">
+                        <p class="textCode" id="textCode">2355468</p>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:20px;margin-left:1px; margin-right:1px;">
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">1</p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">2</p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">3</p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">4</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:20px;margin-left:1px; margin-right:1px;">
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">5</p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">6</p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">7</p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">8</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:20px;margin-left:1px; margin-right:1px;">
+                    <div class="col-3">
+                        <div class="buttonCoffre" onclick="removeAllCoffre()">
+                            <img src="https://img.icons8.com/officel/2x/delete-sign.png" height="50px" width="50px"/>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">9</p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="buttonCoffre">
+                            <p class="textCoffre">0</p>
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="buttonCoffre" onclick="checkCode()">
+                            <img src="https://icons-for-free.com/iconfiles/png/512/correct+mark+success+tick+valid+yes+icon-1320167819078544687.png" width="50px" height="50px"/>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <script>
             var initFunctions;
-            let doorHacked = false;
+            var doorHacked = false;
 
             import('./js/init.js').then(object => {
                 init = object;
             })
+
+            var buttonsCoffre = document.getElementsByClassName("textCoffre")
+
+            for(let i = 0; i < buttonsCoffre.length; i++){
+                buttonsCoffre[i].parentNode.addEventListener("click", function(){
+                    writeCoffre(buttonsCoffre[i].innerText)
+                })
+            }
+
+            function writeCoffre(number){
+                let textCode = document.getElementById("textCode")
+
+                if (textCode.innerText.length < 7){
+                    textCode.innerText += number;
+
+                } else {
+                    textCode.parentNode.style.border = "solid 1px red"
+                }
+
+            }
+
+            function removeAllCoffre(){
+                let textCode = document.getElementById("textCode")
+                textCode.innerText = "";
+                textCode.parentNode.style.border = ""
+            }
+
+            function checkCode(){
+                let textCode = document.getElementById("textCode");
+
+                if (textCode.innerText === "59857"){
+                    let coffre = document.getElementById("coffre");
+                    coffre.style.display = "none";
+
+                    init.unlockDoor()
+                    init.controlLock()
+                    
+                    //Animation debloquage de la clé
+
+                    
+                }
+            }
 
             function openFolderNotHack(){
                 let folder = document.getElementById("folderToHack");
