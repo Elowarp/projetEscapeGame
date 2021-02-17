@@ -27,7 +27,11 @@ const openCoffre = function (){
 
 const removeTapis = function (){
     let tapis = scene.getObjectByName("Tapis");
-    tapis.visible = false;
+    tapis.parent.remove(tapis)
+    tapis.geometry = undefined;
+    tapis.material = undefined;
+
+    animate();
 }
 
 const openDoor = function (){
@@ -42,12 +46,16 @@ const openDoor = function (){
 
 const getCle = function (){
     let cle = scene.getObjectByName("Key");
-    gotCle = true;
     cle.visible = false;
+
+    let trappe = scene.getObjectByName("Trappe")
+    trappe.userData.blocked = false;
 }
 
 const openTrappe = function (){
-    if (gotCle){
+    let trappe = scene.getObjectByName("Trappe")
+
+    if (!trappe.userData.blocked){
         endGame();
     } else {
         // Jouer le son "Mince c'est fermé"
@@ -89,8 +97,6 @@ const actionsByPlayer = {
     "getCle": getCle,
     "openTrappe": openTrappe,
 };
-
-let gotCle = false;
 
 let moveForward = false;
 let moveBackward = false;
@@ -460,7 +466,7 @@ function detectUsableObjects(){
 
     //Test de si on détecte bien un mesh ET qu'il se trouve à moins de 19
     if (intersects.length > 0 && intersects[0].distance < 19){
-        outlineObjects(intersects[0].object);
+        outlineObjects(intersects[0].object)
 
     } else {
         outlineObjects();
@@ -517,7 +523,7 @@ function changeLevel(){
 }
 
 function endGame(){
-    alert("Tu as fini le jeu")
+    alert("Tu as fini le jeu !")
 }
 
 export {controlLock, unlockDoor}
