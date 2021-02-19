@@ -7,7 +7,54 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     </head>
     <body>
-        <div id="blocker" class="blocker">
+        <div id="transition" class="startGame" style="opacity: 0;">
+        </div>
+
+        <div id="startGame" class="startGame">
+            <div class="container">
+                <div class="row-6">
+                    <div class="d-flex justify-content-center">
+                        <div class="informations">
+                            <h6 class="informationText">Chargement...</h6>
+                            <div class="loadingGame">
+                                <div id="loadingGameBar" class="loadingGameBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="startScreen" class="d-flex justify-content-center startScreen" hidden>
+                        <div class="playButton" id="playButton" onclick="launchGame()">
+                            <h6 class="informationText" style="font-size: 30px;">Jouer !</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row-6" hidden>
+                    <div class="d-flex justify-content-center">
+                        <div class="informations">
+                            <p id="introduction" class="informationText" style="opacity: 1; text-align:inherit;">
+                                Bienvenue chez Veripasur, une entreprise de sécurité domestique. Ton but est de sortir de la pièce
+                                en le moins de temps possible. Plus tu mettras de temps, moins tu as auras
+                                d'argent, tu perds 300$ toutes les 30 secondes à partir de 1 minute dans la salle.
+                                Bonne chance !
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="soundInfo" class="row-6">
+                    <div class="d-flex justify-content-center">
+                        <div class="" style="position: absolute;bottom:0; text-align: center">
+                            <img style="" src="./images/sound.png" height="30px" width="30px"/>
+                            <h6 class="informationText">Il est conseillé d'avoir le son activé pour ce jeu.</h6>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div id="blocker" class="blocker" style="display:none" hidden>
             <div id="instructions">
                 <span style="font-size:36px">Cliquer pour jouer</span>
                 <br /><br />
@@ -17,7 +64,7 @@
 
         </div>
 
-        <div id="dot" style="display: none">
+        <div id="dot" style="display: none" hidden>
 
         </div>
 
@@ -30,19 +77,19 @@
                         
                         <div class="row">
                             <div class="folder col-1" style="max-width: 150px;" onclick="openEmptyFolder()">
-                                <img class="folderImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                                <img class="folderImg" src="./images/folder.png" height="100" width="100"/>
                                 <p class="textIcon">Pas un dossier<br>pour hacker</p>
             
                             </div>
             
                             <div class="folder col-1" style="max-width: 150px;" onclick="openEmptyFolder()">
-                                <img class="folderImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                                <img class="folderImg" src="./images/folder.png" height="100" width="100"/>
                                 <p class="textIcon">Pas un dossier<br>pour hacker<br>je te dis</p>
             
                             </div>
             
                             <div class="folder col-1" style="max-width: 150px;" onclick="openEmptyFolder()">
-                                <img class="folderImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                                <img class="folderImg" src="./images/folder.png" height="100" width="100"/>
                                 <p class="textIcon">Devoirs</p>
             
                             </div>
@@ -51,13 +98,13 @@
         
                         <div class="row">
                             <div class="folder col-1" style="max-width: 150px;" onclick="openEmptyFolder()">
-                                <img class="folderImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                                <img class="folderImg" src="./images/folder.png" height="100" width="100"/>
                                 <p class="textIcon">Secrets d'état</p>
             
                             </div>
             
                             <div class="folder col-1" style="max-width: 150px;" onclick="openEmptyFolder()">
-                                <img class="folderImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/1200px-OneDrive_Folder_Icon.svg.png" height="100" width="100"/>
+                                <img class="folderImg" src="./images/folder.png" height="100" width="100"/>
                                 <p class="textIcon">Photos de moi<br>bébé</p>
             
                             </div>
@@ -67,7 +114,7 @@
                         <div class="row">
                             <div class="w-75"></div>
                             <div class="folder col-1" style="max-width: 150px;" onclick="openFolderNotHack()">
-                                <img class="folderImg" src="https://cdn4.iconfinder.com/data/icons/email-2-2/32/Trash-Email-Bin-512.png" height="100" width="100"/>
+                                <img class="folderImg" src="./images/corneille.webp" height="100" width="100"/>
                                 <p class="textIcon">Corneille</p>
             
                             </div>
@@ -76,7 +123,7 @@
                         <div class="card" style="width: 100%; z-index: 1030; position:unset;">
                             <div class="card-body" style="padding:1px">
                                 <div class="home" onclick="closeLaptop()" onmouseover="showInfo('desktop')" onmouseout="hideInfo('desktop')">
-                                    <img class="card-img-left" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/VisualEditor_-_Icon_-_Menu.svg/1024px-VisualEditor_-_Icon_-_Menu.svg.png" height="40" width="40"/>
+                                    <img class="card-img-left" src="./images/menu.png" height="40" width="40"/>
                                 </div>
                                 <div class="infoButton" id="infoButton" style="display:none">
                                     Eteindre
@@ -88,7 +135,7 @@
                     <div class="openedFolder" id="emptyFolder" style="display:none">
                         <div class="barFolder" style="height:33px">
                             <div class="exitFolder" onclick="exitFolder('emptyFolder')">
-                                <img src="http://cdn.onlinewebfonts.com/svg/img_469207.png" height="30" width="30"/>
+                                <img src="./images/exit.png" height="30" width="30"/>
                             </div>
                             <p class="textFolder">Dossier vide !</p>
                         </div>
@@ -98,14 +145,14 @@
                     <div class="openedFolder" id="folderToHack" style="display:none">
                         <div class="barFolder">
                             <div class="exitFolder" onclick="exitFolder('folderToHack')">
-                                <img src="http://cdn.onlinewebfonts.com/svg/img_469207.png" height="30" width="30"/>
+                                <img src="./images/exit.png" height="30" width="30"/>
                             </div>
     
                         </div>
     
                         <div class="row">
                             <div class="folder col-1" style="max-width: 150px; margin-top: 40px;" onclick="hackDoor()">
-                                <img class="folderImg" src="https://i.pinimg.com/originals/7f/d2/e4/7fd2e46b2da9819e667fb75caf475cf7.png" height="100" width="100"/>
+                                <img class="folderImg" src="./images/file.png" height="100" width="100"/>
                                 <p class="textIcon">HackDoor<br>.hack</p>
         
                             </div>
@@ -114,7 +161,7 @@
                         <div class="windowHack" id="windowHack" style="display:none">
                             <div class="barFolder" style="width:32%">
                                 <div class="exitFolder" onclick="exitFolder('windowHack')">
-                                    <img src="http://cdn.onlinewebfonts.com/svg/img_469207.png" height="30" width="30"/>
+                                    <img src="./images/exit.png" height="30" width="30"/>
                                 </div>
         
                             </div>
@@ -124,7 +171,7 @@
                             
                             <div class="row">
                                 <div class="iconHack">
-                                    <img src="https://img.icons8.com/ios/452/hacker.png" height="70" width="70"/>
+                                    <img src="./images/hackman.png" height="70" width="70"/>
         
                                 </div>
         
@@ -154,7 +201,7 @@
                     </div>
                     <div class="buttonHomeLogin">
                         <div class="home" onclick="closeLaptop()" onmouseover="showInfo('login')" onmouseout="hideInfo('login')">
-                            <img class="card-img-left" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/VisualEditor_-_Icon_-_Menu.svg/1024px-VisualEditor_-_Icon_-_Menu.svg.png" height="40" width="40"/>
+                            <img class="card-img-left" src="./images/exit.png" height="30" width="30"/>
                         </div>
                         <div class="infoButton" id="infoButtonLogin" style="display:none">
                             Eteindre
@@ -165,10 +212,19 @@
         </div>
 
         <div id="coffre" class="coffreBackground" style="display:none">
+            <div class="buttonHomeLogin">
+                <div class="home" onclick="closeLaptop()" onmouseover="showInfo('login')" onmouseout="hideInfo('login')">
+                    <img class="card-img-left" src="./images/exit.png" height="20" width="20"/>
+                </div>
+                <div class="infoButton" id="infoButtonLogin" style="display:none">
+                    Eteindre
+                </div>
+            </div>
+
             <div class="container">
                 <div class="row" style="margin-top: 20px;">
                     <div class="container-fluid entryCode" style="width:90%; height: 80px;">
-                        <p class="textCode" id="textCode">2355468</p>
+                        <p class="textCode" id="textCode"></p>
                     </div>
                 </div>
 
@@ -221,7 +277,7 @@
                 <div class="row" style="margin-top:20px;margin-left:1px; margin-right:1px;">
                     <div class="col-3">
                         <div class="buttonCoffre" onclick="removeAllCoffre()">
-                            <img src="https://img.icons8.com/officel/2x/delete-sign.png" height="50px" width="50px"/>
+                            <img src="./images/delete.png" height="50px" width="50px"/>
                         </div>
                     </div>
                     <div class="col-3">
@@ -237,7 +293,7 @@
 
                     <div class="col-3">
                         <div class="buttonCoffre" onclick="checkCode()">
-                            <img src="https://icons-for-free.com/iconfiles/png/512/correct+mark+success+tick+valid+yes+icon-1320167819078544687.png" width="50px" height="50px"/>
+                            <img src="./images/valid.png" width="50px" height="50px"/>
                         </div>
                     </div>
                 </div>
@@ -245,14 +301,45 @@
             </div>
         </div>
 
+        <div id="messageBox">
+            <p id="message" class="message hint">
+                Tu pourras t'aider des touches ZQSD pour bouger, de la souris pour
+                 t'orienter et du clic gauche pour selectionner.
+            </p>
+        </div>
+
+        <div id="endGame" style="opacity: 0;"hidden>
+            <div class="container">
+                <div class="d-flex justify-content-center">
+                    <div class="informations">
+                        <p class="informationText" style="text-align:inherit;">
+                            Bien joué ! Nous contacterons nos ingénieurs pour augmenter la sécurité de nos salles.<br>
+                        </p>
+                        <p class="informationText" style="text-align:inherit;">
+                            Merci d'avoir joué à mon jeu, j'espère qu'il vous a plu ! <br>
+                            -Elowan Harnisch
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
         <script>
-            var initFunctions;
+            //On charge le module une fois que tout les éléments de la page ont chargé
+            (window.addEventListener("load", function(){
+                import('./js/game.js').then(object => {
+                    let progressBar = document.getElementById("loadingGameBar");
+                    progressBar.style.width = "50%";
+
+                    init = object;
+                })
+            }))
+
+            var init;
             var doorHacked = false;
 
-            import('./js/game.js').then(object => {
-                init = object;
-            })
-
+            //On affecte chaque bouton du coffre à la fonction écrivant le nombre dans la bar
             var buttonsCoffre = document.getElementsByClassName("textCoffre")
 
             for(let i = 0; i < buttonsCoffre.length; i++){
@@ -262,62 +349,107 @@
             }
 
             function writeCoffre(number){
+                /*
+                    Fonction écrivant un nombre dans la bar prévue à cette effet dans le coffre
+                */
+
+                //La bar du coffre
                 let textCode = document.getElementById("textCode")
 
+                //Si on ne dépace pas la limite de 7 chiffres
                 if (textCode.innerText.length < 7){
+                    //On écrit le chiffre
                     textCode.innerText += number;
 
                 } else {
+                    //On met un cadre rouge pour signifier qu'on ne peut pas plus écrire
                     textCode.parentNode.style.border = "solid 1px red"
                 }
 
             }
 
             function removeAllCoffre(){
+                /*
+                    Fonction supprimant le contenu de la bar du coffre
+                */
+
                 let textCode = document.getElementById("textCode")
                 textCode.innerText = "";
                 textCode.parentNode.style.border = ""
             }
 
             function checkCode(){
+                /*
+                    Fonction vérifiant que le code entré est le bon
+                */
+
                 let textCode = document.getElementById("textCode");
 
+                //S'il est bien égal
                 if (textCode.innerText === "59857"){
+                    //On supprime le coffre de la vue du joueur
                     let coffre = document.getElementById("coffre");
                     coffre.style.display = "none";
 
+                    //On débloque la porte et on reprend le curseur
                     init.unlockDoor()
                     init.controlLock()
                     
-                    //Animation debloquage de la clé
+                    //On change le message affiché et le prochain indice qui doit être dit
+                    init.changeMessage("Oui ! J'ai enfin la clé !", false, true)
+                    init.changeHint(2)
 
                     
+                } else {
+                    //On affiche une bordure rouge et on dit qu'on s'est trompé
+                    textCode.parentNode.style.border = "solid 1px red";
+                    init.changeMessage("Mince mauvais code, il faut que je le trouve, mais la \
+                     question est 'où ?'..", false, true)
+
                 }
             }
 
             function openFolderNotHack(){
+                /*
+                    Fonction affichant le dossier contenant le fichier .hack
+                */
+
                 let folder = document.getElementById("folderToHack");
                 folder.style.display = "";
             }
 
             function openEmptyFolder(){
+                /*
+                    Fonction affichant un dossier vide
+                */
+
                 let folder = document.getElementById("emptyFolder");
                 folder.style.display = "";
             }
 
             function exitFolder(app){
+                /*
+                    Fonction fermant une page ouverte sur l'ordinateur
+                */
+
                 let folder = document.getElementById(app)
                 folder.style.display = "none";
             }
 
             function hackDoor(){
+                /*
+                    Fonction s'occupant de hacking de la porte
+                */
+
                 let hackWindow = document.getElementById("windowHack")
                 let hackBar = document.getElementById("progressHack");
                 hackWindow.style.display = "";
 
+                //Si on a pas déjà hacké la porte
                 if (!doorHacked){
                     let pourcent = 0;
 
+                    //On fait augmenter la bar de progression
                     var increase = setInterval(()=>{
                         if(pourcent>=100){
                             stopIncrease()
@@ -328,31 +460,53 @@
 
                     }, 50)
 
+                    //Quand on a fini de hacker la porte
                     function stopIncrease(){
+                        //On arrete la progression
                         clearInterval(increase)
+
+                        //On dit qu'on a hacké la porte
                         doorHacked = true
                         init.unlockDoor()
+
+                        //On affiche le message de succés sur la fenêtre
                         let status = document.getElementById("statusDoor")
                         status.style.display = ""
+
+                        //On change l'indice en conséquence
+                        init.changeHint(2)
                     }   
                 }
             }
 
             function closeLaptop(){
+                /*
+                    Fonction fermant l'interface de l'ordinateur
+                */
+                
+                //On enlève le bureau
                 let desktop = document.getElementById("desktop")
                 desktop.style.display = "none"
 
+                //On remet la page de connexion
                 let login = document.getElementById("login")
                 login.style.display = "";
                 login.children[0].value = ""
 
+                //On enleve l'ordinateur de la vue du personnage
                 let laptop = document.getElementById("laptop")
                 laptop.style.display = 'none'
                 init.controlLock()
             }
 
             function showInfo(objet){
+                /*
+                    Fonction affichant une petite bulle d'information à côté d'un bouton
+                */
+
                 let info;
+
+                //On change de Node en fonction de son emplacement
                 switch (objet){
                     case "desktop":
                         info = document.getElementById("infoButton")
@@ -368,7 +522,13 @@
             }
 
             function hideInfo(objet){
+                /*
+                    Fonction enlevant une petite bulle d'information à côté d'un bouton
+                */
+
                 let info;
+
+                //On change de Node en fonction de son emplacement
                 switch (objet){
                     case "desktop":
                         info = document.getElementById("infoButton")
@@ -384,19 +544,78 @@
             }
         
             function checkPassword(){
+                /*
+                    Fonction vérifiant le mot de passe entré sur l'ordinateur
+                */
+
                 let password = document.getElementById("password")
+
+                //Si c'est le bon mot de passe
                 if (password.value == "password123"){
+
+                    //On enleve la page de login et on affiche le bureau
                     let login = document.getElementById("login")
                     login.style.display = "none"
 
                     let desktop = document.getElementById("desktop")
                     desktop.style.display = "";
 
+                    //On reinitialise les classes de l'entrée
                     password.classList = "inputSelect"
+
+                    //On change l'indice en conséquence
+                    init.changeHint(1)
                 } else {
+                    //On change la classe pour indiquer au joueur qu'il s'est trompé
                     password.classList += " wrong"
                     
                 }
+            }
+
+            function launchGame(){
+                /*
+                    Fonction s'occupant de l'affichage des dialogues dans l'introduction au jeu
+                */
+                let button = document.getElementById("playButton")
+                let textIntroduction = document.getElementById("introduction")
+                let startGame = document.getElementById("startGame")
+                let messageBox = document.getElementById("messageBox")
+
+                //On récupère le curseur
+                init.controlLock();
+
+                //On fait un fondu sortant du bouton
+                init.fadeOut(button, 10, () => {
+
+                    //On cache le bouton et rend visible le texte d'introduction
+                    button.parentNode.parentNode.hidden = true;
+                    textIntroduction.parentNode.parentNode.parentNode.hidden = false;
+
+                    //On attend 100ms avant de faire le fondu d'entré du texte
+                    setTimeout(() => {
+                        init.fadeIn(textIntroduction, 5, () => {
+
+                            //On attend 7secondes que le joueur lise le texte avant de le cacher
+                            setTimeout(()=>{
+
+                                init.fadeOut(startGame, 5, () => {
+                                    //On cache l'écran de démarrage avec le texte d'introduction
+                                    startGame.hidden = true
+                                    textIntroduction.hidden = true;
+
+                                    //On affiche le point central pour donner la visée des objets
+                                    document.getElementById("dot").hidden = false;
+
+                                });
+
+                                //En même temps on affiche la boite aux messages
+                                init.fadeIn(messageBox, 5, ()=>{})
+
+                            }, 7000)
+
+                        });
+                    }, 100)
+                })
             }
         </script>
 
