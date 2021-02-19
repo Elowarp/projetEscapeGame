@@ -263,3 +263,103 @@ body {
     text-align: center;
     font-size:30px;
 }
+
+.startGame{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background-color: rgb(24, 24, 24);
+}
+
+.informations{
+    position: absolute;
+    top: 50vmin;
+    text-align: center; 
+    transform: translateY(-50%);
+}
+
+.informationText{
+    margin-top: 30px;
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: rgb(155, 155, 155);
+}
+
+.loadingGame{
+    margin: auto;
+    width: 600px;
+    height: 30px;
+    background-color: rgb(61, 61, 61);
+    border-radius: 5px;
+}
+
+.loadingGameBar{
+    width: 0%;
+    height: 100%;
+    background-color: rgb(87, 87, 87);
+    border-radius: 5px;
+}
+
+.startScreen{
+    opacity: 0;
+    margin-top: 50vh;
+    transform: translateY(-50%)
+}
+
+.playButton{
+    padding-bottom: 0px;
+    padding-left: 25px;
+    padding-right: 25px;
+    border: solid 1px rgb(75, 75, 75);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bottomInfo{
+    position:absolute;
+    bottom: 0;
+    text-align: center;
+    margin-right: 50vh;
+    transform: translateX(-50%)
+}
+
+#messageBox{
+    position: absolute;
+    width: 400px;
+    height: 100px;
+    background-color: rgba(0, 0, 0, 0.46);
+    right: 0;
+    padding: 10px;
+    opacity: 0;
+}
+
+.message{
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(221, 221, 221);
+}
+
+.hint{
+    color: rgb(238, 255, 90);
+}
+
+.player{
+    color: rgb(208, 25, 25);
+}
+
+#endGame{
+    position:fixed;
+    text-align: center;
+    margin-top: 50vmax;
+    transform: translateY(-50%);
+    width:100vmax;
+    height:100vmax;
+    background-color: rgb(24, 24, 24);
+}
+canvas{
+    position: fixed;
+    z-index: -5;
+    display: block;
+}
