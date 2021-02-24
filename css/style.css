@@ -61,6 +61,11 @@ body {
     width:40px;
 }
 
+.card-img-left{
+    height: 3vmax;
+    width: 3vmax;
+}
+
 .home:hover{
     cursor: pointer;
 }
@@ -72,9 +77,9 @@ body {
 }
 
 .textIcon{
-    width: 120%;
+    margin: auto;
     text-align: center;
-    font-size: 15px;
+    font-size: 2vmin;
     font-weight: 400;
     font-family: "Comic Sans MS";
 }
@@ -103,10 +108,9 @@ body {
 }
 
 .barFolder{
-    position: fixed;
+    height: 32px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    width: 80%;
     background-color: rgb(137, 139, 96);
 }
 
@@ -119,9 +123,8 @@ body {
 }
 
 .windowHack{
-    position: absolute;
-    height: 40%;
-    width: 40%;
+    height: 20vmax;
+    width: 40vmax;
     top: 30%;
     left: 30%;
     background-color: rgb(255, 255, 255);
@@ -130,22 +133,19 @@ body {
 }
 
 .iconHack{
-    margin-left: 10px;
-    position: fixed;
+    margin-left: 10vmin;
 }
 
 .progressBar{
-    position: fixed;
     height: 20px;
-    width: 26%;
-    margin-left: 65px;
+    width: 25vmax;
+    margin-left: 35px;
     margin-top: 30px;
     border-radius: 10px;
     background-color: rgb(163, 163, 163);
 }
 
 .progress{
-    position: absolute;
     height: 100%;
     width:0%;
     border-radius: 10px;
@@ -156,7 +156,7 @@ body {
     position: fixed;
     text-align: center;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 100px;
+    font-size: 15vmin;
     left:38%;
     top:30%;
     margin:auto;
@@ -214,8 +214,9 @@ body {
 }
 
 .folderImg{
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: auto;
+    height: 15vh;
+    width: 15vh;
 }
 
 .buttonHomeLogin{
@@ -362,4 +363,14 @@ canvas{
     position: fixed;
     z-index: -5;
     display: block;
+}
+
+.text{
+    margin-top: 10vmin;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 2vmin;
+    font-weight: 400;
+    font-family: "Comic Sans MS";
 }
