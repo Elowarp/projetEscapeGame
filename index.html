@@ -32,7 +32,7 @@
                 <div class="row-6" hidden>
                     <div class="d-flex justify-content-center">
                         <div class="informations">
-                            <p id="introduction" class="informationText" style="opacity: 1; text-align:inherit;">
+                            <p id="introduction" class="informationText" style="opacity: 0; text-align:inherit;">
                                 Bienvenue chez Veripasur, une entreprise de sécurité domestique. Ton but est de sortir de la pièce
                                 en le moins de temps possible. Plus tu mettras de temps, moins tu as auras
                                 d'argent, tu perds 300$ toutes les 30 secondes à partir de 1 minute dans la salle.
@@ -68,16 +68,16 @@
 
         </div>
 
-        <div id="laptop" class="laptopBackground" style="display:none">
+        <div id="laptop" class="laptopBackground" style="display:">
             <div class="laptop">
-                <div class="desktop" id="desktop" style="display:none">
+                <div class="position-fixed" id="desktop" style="display:none">
                         <h1 class="title">
                             Veripasur 
                         </h1>
                         
-                        <div class="row">
+                        <div class="row" style="flex-wrap: unset">
                             <div class="folder col-1" style="max-width: 150px;" onclick="openEmptyFolder()">
-                                <img class="folderImg" src="./images/folder.png" height="100" width="100"/>
+                                <img class="folderImg" src="./images/folder.png" height="100vmin" width="100vmin"/>
                                 <p class="textIcon">Pas un dossier<br>pour hacker</p>
             
                             </div>
@@ -112,7 +112,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="w-75"></div>
+                            <div class=""></div>
                             <div class="folder col-1" style="max-width: 150px;" onclick="openFolderNotHack()">
                                 <img class="folderImg" src="./images/corneille.webp" height="100" width="100"/>
                                 <p class="textIcon">Corneille</p>
@@ -120,80 +120,84 @@
                             </div>
                         </div>
 
-                        <div class="card" style="width: 100%; z-index: 1030; position:unset;">
-                            <div class="card-body" style="padding:1px">
-                                <div class="home" onclick="closeLaptop()" onmouseover="showInfo('desktop')" onmouseout="hideInfo('desktop')">
-                                    <img class="card-img-left" src="./images/menu.png" height="40" width="40"/>
-                                </div>
-                                <div class="infoButton" id="infoButton" style="display:none">
-                                    Eteindre
-                                </div>
-                            </div>
-
-                        </div>
-                        
-                    <div class="openedFolder" id="emptyFolder" style="display:none">
-                        <div class="barFolder" style="height:33px">
-                            <div class="exitFolder" onclick="exitFolder('emptyFolder')">
-                                <img src="./images/exit.png" height="30" width="30"/>
-                            </div>
-                            <p class="textFolder">Dossier vide !</p>
-                        </div>
-    
-                    </div>
-    
-                    <div class="openedFolder" id="folderToHack" style="display:none">
-                        <div class="barFolder">
-                            <div class="exitFolder" onclick="exitFolder('folderToHack')">
-                                <img src="./images/exit.png" height="30" width="30"/>
-                            </div>
-    
-                        </div>
-    
-                        <div class="row">
-                            <div class="folder col-1" style="max-width: 150px; margin-top: 40px;" onclick="hackDoor()">
-                                <img class="folderImg" src="./images/file.png" height="100" width="100"/>
-                                <p class="textIcon">HackDoor<br>.hack</p>
-        
-                            </div>
-                        </div>
-                        
-                        <div class="windowHack" id="windowHack" style="display:none">
-                            <div class="barFolder" style="width:32%">
-                                <div class="exitFolder" onclick="exitFolder('windowHack')">
-                                    <img src="./images/exit.png" height="30" width="30"/>
-                                </div>
-        
-                            </div>
-                            <div class="row">
-                                <p class="textIcon" style="margin-top: 10%;">Hack de la porte en cours.</p>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="iconHack">
-                                    <img src="./images/hackman.png" height="70" width="70"/>
-        
-                                </div>
-        
-                                <div class="progressBar" id="progressHack">
-                                    <div class="progress">
-        
+                        <div class="fixed-bottom">
+                            <div class="card" style="height: 90%; width: 90%; left: 5%; bottom: 3vmin">
+                                <div class="card-body" style="padding:1px">
+                                    <div class="home" onclick="closeLaptop()" onmouseover="showInfo('desktop')" onmouseout="hideInfo('desktop')">
+                                        <img class="card-img-left" src="./images/menu.png" height="40" width="40"/>
                                     </div>
-        
+                                    <div class="infoButton" id="infoButton" style="display:none">
+                                        Eteindre
+                                    </div>
                                 </div>
-
-                            </div>
-                            <div class="row">
-                                <p class="textIcon" id="statusDoor" style="margin-top: 60px; display:none">Porte piratée !!!</p>
-                            </div>
-                            
     
+                            </div>
                         </div>
-    
-                    </div>
                 </div>
 
-                <div id="login">
+                <div class="openedFolder position-fixed" id="emptyFolder" style="display:none">
+                    <div class="barFolder fixed-top" style="width: 80%; top: 10%; left: 10%;">
+                        <div class="exitFolder" onclick="exitFolder('emptyFolder')">
+                            <img src="./images/exit.png" height="30" width="30"/>
+                        </div>
+                        <p class="textFolder">Dossier vide !</p>
+                    </div>
+
+                </div>
+
+                <div class="openedFolder position-fixed" id="folderToHack" style="display:none">
+                    <div class="barFolder fixed-top" style="width: 80%; top: 10%; left: 10%;">
+                        <div class="exitFolder" onclick="exitFolder('folderToHack')">
+                            <img src="./images/exit.png" height="30" width="30"/>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="folder col-1" style="max-width: 150px; margin-top: 40px;" onclick="hackDoor()">
+                            <img class="folderImg" src="./images/file.png" height="100" width="100"/>
+                            <p class="textIcon">HackDoor<br>.hack</p>
+    
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="windowHack position-fixed" id="windowHack" style="display:none">
+                    <div class="barFolder fixed-top" style="width: 40%; top: 30%; left: 30%;">
+                        <div class="exitFolder" onclick="exitFolder('windowHack')">
+                            <img src="./images/exit.png" height="30" width="30"/>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <p class="text" style="">Hack de la porte en cours.</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="iconHack">
+                            <img src="./images/hackman.png" height="70" width="70"/>
+
+                        </div>
+
+                        <div class="progressBar" id="progressHack">
+                            <div class="progress">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <p class="text" id="statusDoor" style="display:none">Porte piratée !!!</p>
+                    </div>
+                    
+
+                </div>
+
+
+
+                <div id="login" style="">
                     <div class="login">
                         <input class="inputSelect" type="password" id="password" placeholder="Mot de passe">
                         <a class="sendButton" onclick="checkPassword()">-></a>
@@ -404,7 +408,7 @@
                     //On affiche une bordure rouge et on dit qu'on s'est trompé
                     textCode.parentNode.style.border = "solid 1px red";
                     init.changeMessage("Mince mauvais code, il faut que je le trouve, mais la \
-                     question est 'où ?'..", false, true)
+                     question est 'où est-il ?'..", false, true)
 
                 }
             }
