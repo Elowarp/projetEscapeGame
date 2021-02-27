@@ -1,3 +1,4 @@
+//Importation des modules THREE.js
 import * as THREE from "https://threejs.org/build/three.module.js";
 import { PointerLockControls } from 'https://threejs.org/examples/jsm/controls/PointerLockControls.js';
 import { EffectComposer } from 'https://threejs.org/examples/jsm/postprocessing/EffectComposer.js';
@@ -5,6 +6,15 @@ import { RenderPass } from 'https://threejs.org/examples/jsm/postprocessing/Rend
 import { ShaderPass } from 'https://threejs.org/examples/jsm/postprocessing/ShaderPass.js';
 import { OutlinePass } from 'https://threejs.org/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'https://threejs.org/examples/jsm/shaders/FXAAShader.js';
+
+
+////////////////////////////////
+
+/*
+    Fonctions
+*/
+
+////////////////////////////////
 
 const openLaptop = function (){
     /*
@@ -55,7 +65,7 @@ const removeTapis = function (){
         currentHint = 1
     }
 
-    changeMessage("Oh... Une trappe cachée", false, true)
+    playSong(buffersSongs.effects["effetsSonores/choseTrouvée.mp3"], 0.4)
 
     animate();
 }
@@ -68,9 +78,10 @@ const openDoor = function (){
     let door = scene.getObjectByName("Door");
     if (door.userData.blocked == false){
         changeLevel();
-        door.userData.blocked = true;
 
     } else {
+        playSong(buffersSongs.effects["effetsSonores/porteMetal.mp3"], 0.2)
+
         changeMessage("Mince c'est fermé, il faut que je trouve un\
          moyen de l'ouvrir...", false, true)
          
@@ -100,7 +111,7 @@ const getCle = function (){
     let trappe = scene.getObjectByName("Trappe")
     trappe.userData.blocked = false;
 
-    changeMessage("Oui ! J'ai la clé !", false, true)
+    changeMessage("Oui ! J'ai enfin la clé !", false, true)
 }
 
 const openTrappe = function (){
@@ -137,66 +148,8 @@ const unlockDoor = function (){
 
     let door = scene.getObjectByName("Door")
     door.userData.blocked = false;
-
+    playSong(buffersSongs.effects["effetsSonores/unlockDoor.mp3"], 0.7)
 }
-
-/*
-    Variables
-*/
-var camera, scene, renderer, controls;
-let composer, effectFXAA, outlinePass;
-let selectedObjects;
-let level = 1;
-let currentHint = 0;
-let afficheAEcran;
-
-let environment;
-
-let timeLastIndice;
-
-let collisions = [];
-let usable = [];
-
-const actionsByPlayer = {
-    "openLaptop": openLaptop,
-    "openCoffre": openCoffre,
-    "removeTapis": removeTapis,
-    "openDoor": openDoor,
-    "getCle": getCle,
-    "openTrappe": openTrappe,
-};
-
-
-//Liste des indices
-// Tableau à 2 entrées = 1e : Le niveau ; 2e : l'indice qui correpond
-const hints = [[
-        "Tu peux essayer de trouver le coffre fort !",
-        "Tu peux essayer de trouver le code du coffre\
-        sous un des posters...",
-        "Tu peux ouvrir la porte maintenant !"
-    ],
-    [
-        "Tu peux essayer de trouver le code de l'ordinateur sur un des post-it...",
-        "Cherche bien dans tous les dossiers de l'ordinateur pour trouver le fichier\
-         hackant la porte...",
-        "Tu peux ouvrir la porte maintenant qu'elle est ouverte !"
-    ],
-    [
-        "Regarde au sol s'il n'y a pas quelque chose de cachée...",
-        "Tu peux essayer de trouver une clé du côté des cartons...",
-        "Tu peux maintenant passer à travers la trappe !"
-    ]
-]
-
-let moveForward = false;
-let moveBackward = false;
-let moveLeft = false;
-let moveRight = false;
-
-const direction = new THREE.Vector3();
-
-init();
-animate();
 
 function init(){
     /*
@@ -227,6 +180,9 @@ function init(){
 
     //Gestion du post processing (Le contour des objets)
     composer = new EffectComposer( renderer );
+
+    //On ajoute le haut parleur à la camera
+    camera.add( listener );
 
     //
     //  Gestion du postprocessing (le contour des objets)
@@ -280,6 +236,10 @@ function init(){
         if(controls.isLocked === true){
             if(selectedObjects.length > 0){
                 actionsByPlayer[selectedObjects[0].userData.action]()
+            }
+        } else {
+            if (afficheAEcran == ""){
+                controls.lock()
             }
         }
     })
@@ -375,6 +335,9 @@ function init(){
             console.error( 'Error : ', err );
         }
     );
+
+    //On charge tout les sons
+    loadSongs()
 }
 
 function onWindowResize() {
@@ -496,6 +459,9 @@ function animate() {
 
     //On regarde si on peut donner un indice au joueur
     giveIndice()
+
+    //On actualise le score affiché
+    setScore()
 
     //On fait le rendu de la scène
     renderer.render( scene, camera );
@@ -638,47 +604,82 @@ function changeLevel(){
         Fonction permettant de changer de niveau de jeu
     */
 
-    //On augmente le niveau
-    level++;
-
     //On affiche au premier plan la page de transition
     let transition = document.getElementById("transition")
-    transition.style.zIndex = 3;
+    transition.style.zIndex = 5000;
+
+    //On change le message dans la boite aux messages
+    changeMessage("Tu es vraiment fort, voyons si tu\
+    arrives à sortir de cette salle")
 
     //On fait un fondu entrant de la page de transition
     fadeIn(transition, 1, () => {
 
-        //On change le message dans la boite aux messages
-        changeMessage("Tu es vraiment fort, voyons si tu\
-         arrives à sortir de cette salle")
+        //On augmente le niveau
+        level++;
 
         //On repositionne la camera au centre du bureau
         controls.getObject().position.set(0, 7.5, 0);
         controls.getObject().rotation.set(0, 0, 0);
 
+        //On remet le score à 3000 pour la salle
+        let scoreSpan = document.getElementById("score")
+        scoreSpan.innerText = "Argent pour l'instant : 3000 $"
+
+        //On supprime les objets utilisables car ils vont probablements changer avec le niveau et on les redifini 
+        usable = [];
+        detectCollision(environment);
+
+        let door = scene.getObjectByName("Door")
+        door.userData.usable = false
+
+        //On reinitialise le score du niveau
+        scoreLevel = 3000;
+        startLevel = new Date;
+
+        //On joue le texte de changement de niveau
+        playSong(buffersSongs.veripasur["veripasur/changementLevel.mp3"], 0.5)
+
         //On fait un fondu sortant de la page de transition
         fadeOut(transition, 1, () => {
+            
             //On replace la page de transition au même niveau que les autres pages
             transition.style.zIndex = 0;
         })
 
     })
-    
-    //On supprime les objets utilisables car ils vont probablements changer avec le niveau et on les redifini 
-    usable = [];
-    detectCollision(environment);
+
+    //On ajoute le score de la partie au score général 
+    scoreTotal += scoreLevel
 }
 
 function endGame(){
     /*
         Fonction affichant l'écran de fin
     */
+
+    //Empeche le fait de cliquer sur les objets du jeu quand on fait l'écran de fin
+    actionsByPlayer = {};
+
     //On rend visible l'écran de fins
     let endScreen = document.getElementById("endGame")
     endScreen.hidden = false;
 
     //On fait un fondu entrant
-    fadeIn(endScreen, 3, () => {})
+    fadeIn(endScreen, 3, () => {
+        //On joue le texte de fin de jeu
+        playSong(buffersSongs.veripasur["veripasur/finJeu.mp3"], 0.5)
+    })
+
+    //Gestion du score
+    scoreTotal += scoreLevel;
+
+    let scoreEnd = document.getElementById("scoreEnd")
+    scoreEnd.innerText = "Vous avez gagnés : " + scoreTotal + " $ !"
+
+    //On rend le curseur et on deconnecte les fonctions associées au curseur 
+    controls.unlock()
+    controls.disconnect()
 }
 
 function showMenu(){
@@ -696,6 +697,7 @@ function showMenu(){
 
     //On fait un fondu sortant de la bar de chargement puis on fait un fondu entrant du bouton
     fadeOut(progressBar.parentNode.parentNode, 10, () => {
+        progressBar.parentNode.parentNode.hidden = true
         fadeIn(startScreen, 10, () => {})
     })
 
@@ -801,4 +803,462 @@ function changeHint(hint){
     currentHint = hint
 }
 
-export {controlLock, unlockDoor, fadeIn, fadeOut, changeMessage, changeHint}
+function setScore(){
+    /*
+        Fonction actualisant le score affiché sur l'écran
+    */
+    let now = new Date;
+    let time = Math.floor(now - startLevel) / 1000
+    let scoreSpan = document.getElementById("score")
+
+    if (time <= 60){
+        scoreSpan.innerText = "Argent pour l'instant : " + scoreLevel + " $";
+    } else if (Math.floor((time - 60) % 30) == 0){
+        if (scoreLevel > 0 && !scoreUpdated){
+            scoreLevel -= 300;
+            scoreSpan.innerText = "Argent pour l'instant : " + scoreLevel + " $"
+            scoreUpdated = true
+        }
+    }
+    
+    if(Math.floor((time - 15) % 30) == 0){
+        scoreUpdated = false
+    }
+
+}
+
+function writeCoffre(number){
+    /*
+        Fonction écrivant un nombre dans la bar prévue à cette effet dans le coffre
+    */
+
+    //La bar du coffre
+    let textCode = document.getElementById("textCode")
+
+    //Si on ne dépace pas la limite de 7 chiffres
+    if (textCode.innerText.length < 7){
+        //On écrit le chiffre
+        textCode.innerText += number;
+        playSong(buffersSongs.effects["effetsSonores/boutonPressé.mp3"], 0.5)
+
+    } else {
+        //On met un cadre rouge pour signifier qu'on ne peut pas plus écrire
+        textCode.parentNode.style.border = "solid 1px red"
+    }
+
+}
+
+function removeAllCoffre(){
+    /*
+        Fonction supprimant le contenu de la bar du coffre
+    */
+
+    let textCode = document.getElementById("textCode")
+    textCode.innerText = "";
+    textCode.parentNode.style.border = ""
+}
+
+function checkCode(){
+    /*
+        Fonction vérifiant que le code entré est le bon
+    */
+
+    let textCode = document.getElementById("textCode");
+
+    //S'il est bien égal
+    if (textCode.innerText === "59857"){
+        //On supprime le coffre de la vue du joueur
+        let coffre = document.getElementById("coffre");
+        coffre.style.display = "none";
+
+        //On débloque la porte et on reprend le curseur
+        unlockDoor()
+        controlLock()
+        
+        //On change le message affiché et le prochain indice qui doit être dit
+        changeMessage("Oui ! J'ai enfin la clé !", false, true)
+        changeHint(2)
+
+        
+    } else {
+        //On affiche une bordure rouge et on dit qu'on s'est trompé
+        textCode.parentNode.style.border = "solid 1px red";
+        changeMessage("Mince mauvais code, il faut que je le trouve, mais la \
+         question est 'où est-il ?'..", false, true)
+
+    }
+}
+
+function openFolderToHack(){
+    /*
+        Fonction affichant le dossier contenant le fichier .hack
+    */
+
+    let folder = document.getElementById("folderToHack");
+    folder.style.display = "";
+}
+
+function openEmptyFolder(){
+    /*
+        Fonction affichant un dossier vide
+    */
+
+    let folder = document.getElementById("emptyFolder");
+    folder.style.display = "";
+}
+
+function exitFolder(app){
+    /*
+        Fonction fermant une page ouverte sur l'ordinateur
+    */
+
+    let folder = document.getElementById(app)
+    folder.style.display = "none";
+}
+
+function hackDoor(){
+    /*
+        Fonction s'occupant de hacking de la porte
+    */
+
+    let hackWindow = document.getElementById("windowHack")
+    let hackBar = document.getElementById("progressHack");
+    hackWindow.style.display = "";
+
+    //Si on a pas déjà hacké la porte
+    if (!doorHacked){
+        let pourcent = 0;
+
+        //On fait augmenter la bar de progression
+        var increase = setInterval(()=>{
+            if(pourcent>=100){
+                stopIncrease()
+            }
+
+            hackBar.children[0].style.width = pourcent + "%";
+            pourcent = pourcent+1;
+
+        }, 50)
+
+        //Quand on a fini de hacker la porte
+        function stopIncrease(){
+            //On arrete la progression
+            clearInterval(increase)
+
+            //On dit qu'on a hacké la porte
+            doorHacked = true
+            unlockDoor()
+
+            //On affiche le message de succés sur la fenêtre
+            let status = document.getElementById("statusDoor")
+            status.style.display = ""
+
+            //On change l'indice en conséquence
+            changeHint(2)
+        }   
+    }
+}
+
+function closeLaptop(){
+    /*
+        Fonction fermant l'interface de l'ordinateur
+    */
+    
+    //On enlève le bureau
+    let desktop = document.getElementById("desktop")
+    desktop.style.display = "none"
+
+    let windows = document.getElementsByClassName("window")
+    for(let i = 0; i < windows.length; i++){
+        windows[i].style.display = "none";
+    };
+
+    //On remet la page de connexion
+    let login = document.getElementById("login")
+    login.style.display = "";
+    login.children[0].value = ""
+
+    //On enleve l'ordinateur de la vue du personnage
+    let laptop = document.getElementById("laptop")
+    laptop.style.display = 'none'
+    controlLock()
+}
+
+function showInfo(objet){
+    /*
+        Fonction affichant une petite bulle d'information à côté d'un bouton
+    */
+
+    let info;
+
+    //On change de Node en fonction de son emplacement
+    switch (objet){
+        case "desktop":
+            info = document.getElementById("infoButton")
+            break;
+        case "login":
+            info = document.getElementById("infoButtonLogin")
+            break;
+        default:
+            break;
+    }
+    
+    info.style.display = ""
+}
+
+function hideInfo(objet){
+    /*
+        Fonction enlevant une petite bulle d'information à côté d'un bouton
+    */
+
+    let info;
+
+    //On change de Node en fonction de son emplacement
+    switch (objet){
+        case "desktop":
+            info = document.getElementById("infoButton")
+            break;
+        case "login":
+            info = document.getElementById("infoButtonLogin")
+            break;
+        default:
+            break;
+    }
+
+    info.style.display = "none"
+}
+
+function checkPassword(){
+    /*
+        Fonction vérifiant le mot de passe entré sur l'ordinateur
+    */
+
+    let password = document.getElementById("password")
+
+    //Si c'est le bon mot de passe
+    if (password.value == "password123"){
+
+        //On enleve la page de login et on affiche le bureau
+        let login = document.getElementById("login")
+        login.style.display = "none"
+
+        let desktop = document.getElementById("desktop")
+        desktop.style.display = "";
+
+        //On reinitialise les classes de l'entrée
+        password.classList = "inputSelect"
+
+        //On change l'indice en conséquence
+        changeHint(1)
+
+        playSong(buffersSongs.effects["effetsSonores/xpStartup.mp3"], 0.5)
+    } else {
+        //On change la classe pour indiquer au joueur qu'il s'est trompé
+        password.classList += " wrong"
+        
+    }
+}
+
+function launchGame(){
+    /*
+        Fonction s'occupant de l'affichage des dialogues dans l'introduction au jeu
+    */
+    let button = document.getElementById("playButton")
+    let textIntroduction = document.getElementById("introduction")
+    let startGame = document.getElementById("startGame")
+    let messageBox = document.getElementById("messageBox")
+
+    //On récupère le curseur
+    controlLock();
+
+    //On fait un fondu sortant du bouton
+    fadeOut(button, 10, () => {
+
+        //On cache le bouton et rend visible le texte d'introduction
+        button.parentNode.parentNode.hidden = true;
+        textIntroduction.parentNode.parentNode.parentNode.hidden = false;
+
+        //On attend 100ms avant de faire le fondu d'entré du texte
+        setTimeout(() => {
+            fadeIn(textIntroduction, 5, () => {
+
+                //On joue le texte d'introduction
+                playSong(buffersSongs.veripasur["veripasur/intro.mp3"], 0.5)
+
+                //On attend 7secondes que le joueur lise le texte avant de le cacher
+                setTimeout(()=>{
+
+                    fadeOut(startGame, 5, () => {
+                        //On cache l'écran de démarrage avec le texte d'introduction
+                        startGame.hidden = true
+                        textIntroduction.hidden = true;
+
+                        //On affiche le point central pour donner la visée des objets
+                        document.getElementById("dot").hidden = false;
+
+                        afficheAEcran = "";
+
+                        startLevel = new Date;
+
+                    });
+
+                    //En même temps on affiche la boite aux messages
+                    fadeIn(messageBox, 5, ()=>{})
+
+                }, 15000)
+
+            });
+        }, 100)
+    })
+
+}
+
+function playSong(buffer, soundLevel){
+    if (!sound.isPlaying){
+        sound.setBuffer( buffer );
+        sound.setLoop( false );
+        sound.setVolume( soundLevel );
+        sound.play();
+    } else {
+        sound.stop()
+        sound.setBuffer( buffer );
+        sound.setLoop( false );
+        sound.setVolume( soundLevel );
+        sound.play();
+    }
+}
+
+function loadSongs(){
+    let sounds = [
+        [ //Sons de la patronne veripasur
+            "veripasur/intro.mp3",
+            "veripasur/changementLevel.mp3",
+            "veripasur/finJeu.mp3",
+        ],
+
+        [ //Sons du joueur
+
+        ],
+
+        [ //Effets sonores
+            "effetsSonores/xpStartup.mp3",
+            "effetsSonores/porteMetal.mp3",
+            "effetsSonores/choseTrouvée.mp3",
+            "effetsSonores/unlockDoor.mp3",
+            "effetsSonores/boutonPressé.mp3"
+        ]
+    ]
+
+    for(let i = 0; i < sounds.length; i++){
+        for (let j = 0; j < sounds[i].length; j++){
+            audioLoader.load( 'sounds/' + sounds[i][j], function( buffer ) {
+                switch (i){
+                    case 0:
+                        buffersSongs.veripasur[sounds[i][j]] = buffer;
+                        break
+                    
+                    case 1:
+                        buffersSongs.player[sounds[i][j]] = buffer;
+                        break
+
+                    case 2:
+                        buffersSongs.effects[sounds[i][j]] = buffer;
+                        break
+
+                    default: 
+                        break
+                }
+                
+            });
+        }
+    }
+    
+    
+}
+
+
+////////////////////////////////
+
+/*
+    Variables
+*/
+
+////////////////////////////////
+
+var camera, scene, renderer, controls;
+let composer, effectFXAA, outlinePass;
+let selectedObjects;
+let level = 1;
+let currentHint = 0;
+let afficheAEcran = "starting";
+
+let startLevel;
+let scoreTotal = 0;
+let scoreLevel = 3000;
+
+let scoreUpdated = false;
+
+let environment;
+
+let timeLastIndice;
+
+let collisions = [];
+let usable = [];
+
+let actionsByPlayer = {
+    "openLaptop": openLaptop,
+    "openCoffre": openCoffre,
+    "removeTapis": removeTapis,
+    "openDoor": openDoor,
+    "getCle": getCle,
+    "openTrappe": openTrappe,
+};
+
+
+//Liste des indices
+// Tableau à 2 entrées = 1e : Le niveau ; 2e : l'indice qui correpond
+const hints = [[
+        "Tu peux essayer de trouver le coffre fort !",
+        "Tu peux essayer de trouver le code du coffre\
+        sous un des posters...",
+        "Tu peux ouvrir la porte maintenant qu'elle est ouverte !"
+    ],
+    [
+        "Tu peux essayer de trouver le code de l'ordinateur sur un des post-it...",
+        "Cherche bien dans tous les dossiers de l'ordinateur pour trouver le fichier\
+         hackant la porte...",
+        "Tu peux ouvrir la porte maintenant qu'elle est ouverte !"
+    ],
+    [
+        "Regarde au sol s'il n'y a pas quelque chose de cachée...",
+        "Tu peux essayer de trouver une clé du côté des cartons...",
+        "Tu peux maintenant passer à travers la trappe !"
+    ]
+]
+
+let moveForward = false;
+let moveBackward = false;
+let moveLeft = false;
+let moveRight = false;
+
+const direction = new THREE.Vector3();
+
+const listener = new THREE.AudioListener();
+const sound = new THREE.Audio( listener );
+
+const buffersSongs = {
+    "player": {},
+    "veripasur": {},
+    "effects": {}
+}
+
+const audioLoader = new THREE.AudioLoader();
+
+
+//Fonctions lançant le jeu 
+init();
+animate();
+
+//Exportation des fonctions du jeu 
+export {launchGame, openEmptyFolder, openFolderToHack, closeLaptop, showInfo, exitFolder, hackDoor,
+    checkPassword, hideInfo, removeAllCoffre, checkCode, writeCoffre, }
