@@ -85,6 +85,10 @@ const openDoor = function (){
 
             changeMessage("Mince c'est fermé, il faut que je trouve un\
             moyen de l'ouvrir...", false, true)
+
+            setTimeout(() => {
+                playSong(buffersSongs.player["player/openClosedDoor.mp3"], 0.7)
+            }, 1500)
             
     }
     }
@@ -114,7 +118,8 @@ const getCle = function (){
     let trappe = scene.getObjectByName("Trappe")
     trappe.userData.blocked = false;
 
-    changeMessage("Oui ! J'ai enfin la clé !", false, true)
+    changeMessage("Oui ! J'ai la clé !", false, true)
+    playSong(buffersSongs.player["player/getCle.mp3"], 0.7)
 }
 
 const openTrappe = function (){
@@ -884,6 +889,7 @@ function checkCode(){
         
         //On change le message affiché et le prochain indice qui doit être dit
         changeMessage("Oui ! J'ai enfin la clé !", false, true)
+        playSong(buffersSongs.player["player/enfinCle.mp3"], 0.7)
         changeHint(2)
 
         
@@ -1144,7 +1150,9 @@ function loadSongs(){
         ],
 
         [ //Sons du joueur
-
+            "player/enfinCle.mp3",
+            "player/getCle.mp3",
+            "player/openClosedDoor.mp3"
         ],
 
         [ //Effets sonores
