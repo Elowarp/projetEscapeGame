@@ -136,6 +136,7 @@ const openTrappe = function (){
     } else {
         changeMessage("Mince c'est fermé, il faut que je trouve un\
          moyen de l'ouvrir...", false, true)
+        playSong(buffersSongs.player["player/openClosedDoor.mp3"], 0.7)
         
     }
 }
@@ -898,6 +899,7 @@ function checkCode(){
         textCode.parentNode.style.border = "solid 1px red";
         changeMessage("Mince mauvais code, il faut que je le trouve, mais la \
          question est 'où est-il ?'..", false, true)
+        playSong(buffersSongs.player["player/wrongCode.mp3"], 0.7)
 
     }
 }
@@ -1068,6 +1070,8 @@ function checkPassword(){
     } else {
         //On change la classe pour indiquer au joueur qu'il s'est trompé
         password.classList += " wrong"
+
+        playSong(buffersSongs.player["player/wrongCode.mp3"], 0.9)
         
     }
 }
@@ -1157,7 +1161,8 @@ function loadSongs(){
         [ //Sons du joueur
             "player/enfinCle.mp3",
             "player/getCle.mp3",
-            "player/openClosedDoor.mp3"
+            "player/openClosedDoor.mp3",
+            "player/wrongCode.mp3"
         ],
 
         [ //Effets sonores
