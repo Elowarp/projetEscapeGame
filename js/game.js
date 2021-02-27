@@ -75,17 +75,20 @@ const openDoor = function (){
         Fonction appelé quand on clic sur la porte
     */
 
-    let door = scene.getObjectByName("Door");
-    if (door.userData.blocked == false){
-        changeLevel();
+    if (afficheAEcran == ""){
+        let door = scene.getObjectByName("Door");
+        if (door.userData.blocked == false){
+            changeLevel();
 
-    } else {
-        playSong(buffersSongs.effects["effetsSonores/porteMetal.mp3"], 0.2)
+        } else {
+            playSong(buffersSongs.effects["effetsSonores/porteMetal.mp3"], 0.2)
 
-        changeMessage("Mince c'est fermé, il faut que je trouve un\
-         moyen de l'ouvrir...", false, true)
-         
+            changeMessage("Mince c'est fermé, il faut que je trouve un\
+            moyen de l'ouvrir...", false, true)
+            
     }
+    }
+    
 }
 
 const getCle = function (){
@@ -604,6 +607,7 @@ function changeLevel(){
         Fonction permettant de changer de niveau de jeu
     */
 
+    afficheAEcran = "transition"
     //On affiche au premier plan la page de transition
     let transition = document.getElementById("transition")
     transition.style.zIndex = 5000;
@@ -630,12 +634,13 @@ function changeLevel(){
         usable = [];
         detectCollision(environment);
 
-        let door = scene.getObjectByName("Door")
-        door.userData.usable = false
-
         //On reinitialise le score du niveau
         scoreLevel = 3000;
         startLevel = new Date;
+
+        //On rebloque la porte
+        let door = scene.getObjectByName("Door")
+        door.userData.blocked = true
 
         //On joue le texte de changement de niveau
         playSong(buffersSongs.veripasur["veripasur/changementLevel.mp3"], 0.5)
@@ -645,6 +650,8 @@ function changeLevel(){
             
             //On replace la page de transition au même niveau que les autres pages
             transition.style.zIndex = 0;
+
+            afficheAEcran = ""
         })
 
     })
