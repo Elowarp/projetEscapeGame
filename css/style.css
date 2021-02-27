@@ -273,8 +273,7 @@ body {
 }
 
 .informations{
-    position: absolute;
-    top: 50vmin;
+    margin-top: 50vmin;
     text-align: center; 
     transform: translateY(-50%);
 }
@@ -373,4 +372,8 @@ canvas{
     font-size: 2vmin;
     font-weight: 400;
     font-family: "Comic Sans MS";
+}
+
+.strong{
+    font-weight: 800;
 }
