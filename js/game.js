@@ -1118,7 +1118,7 @@ function launchGame(){
                     //En même temps on affiche la boite aux messages
                     fadeIn(messageBox, 5, ()=>{})
 
-                }, 15000)
+                }, 19000)
 
             });
         }, 100)
@@ -1127,21 +1127,26 @@ function launchGame(){
 }
 
 function playSong(buffer, soundLevel){
-    if (!sound.isPlaying){
-        sound.setBuffer( buffer );
-        sound.setLoop( false );
-        sound.setVolume( soundLevel );
-        sound.play();
-    } else {
+    /*
+        Fonction gérant le son joué en jeu
+    */
+
+    //Si il y a déjà du son, on le coupe
+    if (sound.isPlaying){
         sound.stop()
-        sound.setBuffer( buffer );
-        sound.setLoop( false );
-        sound.setVolume( soundLevel );
-        sound.play();
     }
+
+    //On joue le son
+    sound.setBuffer( buffer );
+    sound.setLoop( false );
+    sound.setVolume( soundLevel );
+    sound.play();
 }
 
 function loadSongs(){
+    /*
+        Fonction chargeant dans une variable global tout les sons qu'on utilise
+    */
     let sounds = [
         [ //Sons de la patronne veripasur
             "veripasur/intro.mp3",
