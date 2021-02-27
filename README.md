@@ -7,6 +7,7 @@
 >python3.8 -m http.server
 
 (Remplacez "python3.8" par votre version de python)
+
 Exécutez cette commande dans le dossier du jeu vidéo (au même niveau que index.html)
 
 Elle lance le serveur sur le port 8000.
