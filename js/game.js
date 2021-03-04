@@ -85,6 +85,10 @@ const openDoor = function (){
 
             changeMessage("Mince c'est fermé, il faut que je trouve un\
             moyen de l'ouvrir...", false, true)
+
+            setTimeout(() => {
+                playSong(buffersSongs.player["player/openClosedDoor.mp3"], 0.7)
+            }, 1500)
             
     }
     }
@@ -114,7 +118,8 @@ const getCle = function (){
     let trappe = scene.getObjectByName("Trappe")
     trappe.userData.blocked = false;
 
-    changeMessage("Oui ! J'ai enfin la clé !", false, true)
+    changeMessage("Oui ! J'ai la clé !", false, true)
+    playSong(buffersSongs.player["player/getCle.mp3"], 0.7)
 }
 
 const openTrappe = function (){
@@ -131,6 +136,7 @@ const openTrappe = function (){
     } else {
         changeMessage("Mince c'est fermé, il faut que je trouve un\
          moyen de l'ouvrir...", false, true)
+        playSong(buffersSongs.player["player/openClosedDoor.mp3"], 0.7)
         
     }
 }
@@ -884,6 +890,7 @@ function checkCode(){
         
         //On change le message affiché et le prochain indice qui doit être dit
         changeMessage("Oui ! J'ai enfin la clé !", false, true)
+        playSong(buffersSongs.player["player/enfinCle.mp3"], 0.7)
         changeHint(2)
 
         
@@ -892,6 +899,7 @@ function checkCode(){
         textCode.parentNode.style.border = "solid 1px red";
         changeMessage("Mince mauvais code, il faut que je le trouve, mais la \
          question est 'où est-il ?'..", false, true)
+        playSong(buffersSongs.player["player/wrongCode.mp3"], 0.7)
 
     }
 }
@@ -1062,6 +1070,8 @@ function checkPassword(){
     } else {
         //On change la classe pour indiquer au joueur qu'il s'est trompé
         password.classList += " wrong"
+
+        playSong(buffersSongs.player["player/wrongCode.mp3"], 0.9)
         
     }
 }
@@ -1112,7 +1122,7 @@ function launchGame(){
                     //En même temps on affiche la boite aux messages
                     fadeIn(messageBox, 5, ()=>{})
 
-                }, 15000)
+                }, 19000)
 
             });
         }, 100)
@@ -1121,21 +1131,26 @@ function launchGame(){
 }
 
 function playSong(buffer, soundLevel){
-    if (!sound.isPlaying){
-        sound.setBuffer( buffer );
-        sound.setLoop( false );
-        sound.setVolume( soundLevel );
-        sound.play();
-    } else {
+    /*
+        Fonction gérant le son joué en jeu
+    */
+
+    //Si il y a déjà du son, on le coupe
+    if (sound.isPlaying){
         sound.stop()
-        sound.setBuffer( buffer );
-        sound.setLoop( false );
-        sound.setVolume( soundLevel );
-        sound.play();
     }
+
+    //On joue le son
+    sound.setBuffer( buffer );
+    sound.setLoop( false );
+    sound.setVolume( soundLevel );
+    sound.play();
 }
 
 function loadSongs(){
+    /*
+        Fonction chargeant dans une variable global tout les sons qu'on utilise
+    */
     let sounds = [
         [ //Sons de la patronne veripasur
             "veripasur/intro.mp3",
@@ -1144,7 +1159,10 @@ function loadSongs(){
         ],
 
         [ //Sons du joueur
-
+            "player/enfinCle.mp3",
+            "player/getCle.mp3",
+            "player/openClosedDoor.mp3",
+            "player/wrongCode.mp3"
         ],
 
         [ //Effets sonores
